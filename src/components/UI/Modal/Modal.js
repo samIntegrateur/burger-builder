@@ -7,7 +7,8 @@ class Modal extends Component {
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
     // optimization: we don't need to update its children (OrderSummary) if the modal is not opened
-    return nextProps.show !== this.props.show;
+    // second check is for loader
+    return nextProps.show !== this.props.show || nextProps.children !== this.props.children;
   }
   
   componentDidUpdate(prevProps, prevState, snapshot) {
