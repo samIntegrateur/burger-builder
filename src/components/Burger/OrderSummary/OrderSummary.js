@@ -6,7 +6,6 @@ class OrderSummary extends Component {
 
   // this could be a functional cpnt, we did that only for performance testing purpose (cf Modal.js
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log('OrderSummary update');
   }
 
   render() {
