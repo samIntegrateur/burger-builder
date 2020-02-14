@@ -25,7 +25,7 @@ const store = createStore(rootReducer, composeEnhancers(
 
 const app = (
   <Provider store={store}>
-    <BrowserRouter>d
+    <BrowserRouter>
       <App />
     </BrowserRouter>
   </Provider>
