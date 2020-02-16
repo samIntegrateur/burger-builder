@@ -128,6 +128,7 @@ class Auth extends Component {
         {authRedirect}
         {errorMessage}
         <form onSubmit={this.submitHandler}>
+          <h1>{this.state.isSignup ? 'SIGNUP' : 'SIGNIN'}</h1>
           {form}
 
           {/*remove disable to see errors returned by the api*/}
