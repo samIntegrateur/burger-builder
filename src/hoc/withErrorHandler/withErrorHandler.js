@@ -1,47 +1,26 @@
-import React, { Component } from 'react';
-
+import React from 'react';
+import useHttpErrorHandler from '../../hooks/http-error-handler';
 import Modal from '../../components/UI/Modal/Modal';
 import Aux from '../Auxiliary/Auxiliary';
 
 const withErrorHandler = (WrappedComponent, axios) => {
-  return class extends Component {
-    state = {
-      error: null
-    };
 
-    constructor(props) {
-      super(props);
-      this.requestInterceptor = axios.interceptors.request.use(req => {
-        this.setState({error: null});
-        return req;
-      });
-      this.responseInterceptor =  axios.interceptors.response.use(res => res, error => {
-        this.setState({error: error});
-      });
-    }
+  return (props) => {
 
-    componentWillUnmount() {
-      // avoid memory leaks if we use withErrorHandler with different components
-      axios.interceptors.request.eject(this.requestInterceptor);
-      axios.interceptors.request.eject(this.responseInterceptor);
-    }
+    // having moved the logic into a hook allows us to use it for this modal,
+    // but eventually for any other ui
+    const [error, clearError] = useHttpErrorHandler(axios);
 
-    errorConfirmedHandler = () => {
-      this.setState({error: null});
-    };
-
-    render () {
-      return (
-        <Aux>
-          <Modal
-            show={this.state.error}
-            modalClosed={this.errorConfirmedHandler}>
-            {this.state.error ? this.state.error.message : null}
-          </Modal>
-          <WrappedComponent {...this.props} />
-        </Aux>
-      );
-    }
+    return (
+      <Aux>
+        <Modal
+          show={error}
+          modalClosed={clearError}>
+          {error ? error.message : null}
+        </Modal>
+        <WrappedComponent {...props} />
+      </Aux>
+    );
 
   }
 };

@@ -1,43 +1,36 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import Aux from '../Auxiliary/Auxiliary';
 import classes from './Layout.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 import {connect} from 'react-redux';
-import * as actions from '../../store/actions';
 
-class Layout extends Component {
+const layout = (props) => {
 
-  state = {
-    showSideDrawer: false
+  const [sideDrawerIsVisible, setSideDrawerClosedHandler] = useState(false);
+
+  const sideDrawerToggleHandler = () => {
+    setSideDrawerClosedHandler(!sideDrawerIsVisible);
   };
 
-  sideDrawerToggleHandler = () => {
-    this.setState((prevState) => {
-      return {showSideDrawer: !prevState.showSideDrawer}
-    });
+  const sideDrawerClosedHandler = () => {
+    setSideDrawerClosedHandler(false);
   };
 
-  sideDrawerClosedHandler = () => {
-    this.setState({showSideDrawer: false})
-  };
-
-  render() {
-    return (
-      <Aux>
-        <Toolbar
-          isAuth={this.props.isAuthenticated}
-          drawerToggleClicked={this.sideDrawerToggleHandler} />
-        <SideDrawer
-          isAuth={this.props.isAuthenticated}
-          open={this.state.showSideDrawer}
-          closed={this.sideDrawerClosedHandler} />
-        <main className={classes.Content}>
-          {this.props.children}
-        </main>
-      </Aux>
-    )
-  }
+  return (
+    <Aux>
+      <Toolbar
+        isAuth={props.isAuthenticated}
+        drawerToggleClicked={sideDrawerToggleHandler} />
+      <SideDrawer
+        isAuth={props.isAuthenticated}
+        open={sideDrawerIsVisible}
+        closed={sideDrawerClosedHandler} />
+      <main className={classes.Content}>
+        {props.children}
+      </main>
+    </Aux>
+  );
 };
 
 const mapStateToProps = state => {
@@ -46,4 +39,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Layout);
+export default connect(mapStateToProps)(layout);
